@@ -78,7 +78,7 @@ char	*ft_strjoin(int size, char **strs, char *sep)
 
 
 
-int	main(void)
-{
-	
-}
+char *arr[] = {"Hello", "World", "42"};
+char *result = ft_strjoin(3, arr, " ");
+printf("%s\n", result);  // Output: "Hello World 42"
+free(result);
