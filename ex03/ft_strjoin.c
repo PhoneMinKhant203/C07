@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: phonekha <phonekha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 19:13:34 by phonekha          #+#    #+#             */
-/*   Updated: 2025/05/28 19:20:18 by phonekha         ###   ########.fr       */
+/*   Created: 2025/05/28 22:52:34 by phonekha          #+#    #+#             */
+/*   Updated: 2025/06/02 10:18:52 by phonekha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,71 +14,86 @@
 
 int	ft_strlen(char *str)
 {
-	int	len;
+	int	cur;
 
-	len = 0;
-	while (*str)
-	{
-		len++;
-		str++;
-	}
-	return (len);
+	cur = 0;
+	while (str[cur] != 0)
+		cur++;
+	return (cur);
 }
 
-char	*ft_strcpy(char *dest, char *src)
+char	*ft_strcat(char *dest, char *src)
 {
-	int	i;
+	int	cur;
+	int	destcur;
 
-	i = 0;
-	while (src[i] != '\0')
+	cur = 0;
+	destcur = ft_strlen(dest);
+	while (src[cur] != 0)
 	{
-		*dest = src[i];
-		i++;
-		dest++;
+		dest[destcur] = src[cur];
+		cur++;
+		destcur++;
 	}
+	dest[destcur] = 0;
 	return (dest);
 }
 
-int	return_lenght(int size, char **strs, int size_sep)
+int	get_size_of_future_str(int size, char **strs, char *sep)
 {
-	int	i;
-	int	len;
+	int	joined_size;
+	int	cur;
 
-	i = -1;
-	len = size_sep * -1;
-	while (++i < size)
-		len += size_sep + ft_strlen(strs[i]);
-	return (len);
+	joined_size = 0;
+	cur = -1;
+	while (cur++, cur < size)
+		joined_size += ft_strlen(strs[cur]);
+	joined_size += (size - 1) * ft_strlen(sep);
+	return (joined_size);
 }
 
 char	*ft_strjoin(int size, char **strs, char *sep)
 {
-	int		i;
-	char	*res;
-	int		len;
+	char	*joined;
+	int		cur;
+	int		joined_size;
 
-	if (size == 0)
+	if (size <= 0)
 	{
-		res = (char *)malloc(1);
-		return (res);
+		joined = (char *)malloc(0);
+		return (joined);
 	}
-	len = return_lenght(size, strs, ft_strlen(sep));
-	i = -1;
-	if ((res = malloc(sizeof(char) * (len + 1))) == NULL)
-		return (0);
-	while (++i < size)
+	joined_size = get_size_of_future_str(size, strs, sep);
+	joined = (char *)malloc(sizeof(char) * (joined_size + 1));
+	while (joined_size-- >= 0)
+		joined[joined_size] = '\0';
+	cur = -1;
+	while (cur++, cur < size)
 	{
-		res = ft_strcpy(res, strs[i]);
-		if (i + 1 < size)
-			res = ft_strcpy(res, sep);
+		joined = ft_strcat(joined, strs[cur]);
+		if (cur != size - 1)
+			joined = ft_strcat(joined, sep);
 	}
-	*res = '\0';
-	return (res - len);
+	return (joined);
 }
 
+// int main(void)
+// {
+// 	char	**strs;
 
-
-char *arr[] = {"Hello", "World", "42"};
-char *result = ft_strjoin(3, arr, " ");
-printf("%s\n", result);  // Output: "Hello World 42"
-free(result);
+// 	strs = (char **)malloc(sizeof(char *) * 3);
+// 	strs[0] = (char *)malloc(sizeof(char) * 6);
+// 	strs[0] = "Hello";
+// 	strs[1] = (char *)malloc(sizeof(char) * 6);
+// 	strs[1] = "World";
+// 	strs[2] = (char *)malloc(sizeof(char) * 6);
+// 	strs[2] = "!!";
+// 	for (int i = 0; i < 3; i++) {
+//         for (int j = 0; j < 6; j++) {
+//             printf("%c", strs[i][j]);
+//         }
+//       	printf("\n");
+//     }
+// 	printf("\n");
+// 	printf("%s", ft_strjoin(3, strs, " - "));
+// }

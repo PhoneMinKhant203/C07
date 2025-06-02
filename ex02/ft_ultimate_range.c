@@ -6,7 +6,7 @@
 /*   By: phonekha <phonekha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:06:18 by phonekha          #+#    #+#             */
-/*   Updated: 2025/05/28 19:13:02 by phonekha         ###   ########.fr       */
+/*   Updated: 2025/06/02 10:18:04 by phonekha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_ultimate_range(int **range, int min, int max)
 // 	int max;
 // 	int size;
 
-// 	min = 0;
+// 	min = 3;
 // 	max = 5;
 // 	size = ft_ultimate_range(&a, min, max);
 // 	if (a != NULL)
