@@ -1,0 +1,61 @@
+ valgrind --leak-check=full --track-origins=yes ./a.out
+==3644404== Memcheck, a memory error detector
+==3644404== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3644404== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==3644404== Command: ./a.out
+==3644404== 
+Hello
+World
+!!%c
+
+==3644404== Invalid write of size 8
+==3644404==    at 0x109328: ft_strjoin (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==    by 0x1094C7: main (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==  Address 0x4aa7658 is 40 bytes inside an unallocated block of size 4,192,688 in arena "client"
+==3644404== 
+==3644404== Invalid read of size 1
+==3644404==    at 0x1091CB: ft_strcat (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==    by 0x109365: ft_strjoin (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==    by 0x1094C7: main (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==3644404== 
+==3644404== 
+==3644404== Process terminating with default action of signal 11 (SIGSEGV)
+==3644404==  Access not within mapped region at address 0x0
+==3644404==    at 0x1091CB: ft_strcat (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==    by 0x109365: ft_strjoin (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==    by 0x1094C7: main (in /home/phonekha/c/C07/ex03/a.out)
+==3644404==  If you believe this happened as a result of a stack
+==3644404==  overflow in your program's main thread (unlikely but
+==3644404==  possible), you can try to increase the size of the
+==3644404==  main thread stack using the --main-stacksize= flag.
+==3644404==  The main thread stack size used in this run was 8388608.
+==3644404== 
+==3644404== HEAP SUMMARY:
+==3644404==     in use at exit: 1,085 bytes in 6 blocks
+==3644404==   total heap usage: 6 allocs, 0 frees, 1,085 bytes allocated
+==3644404== 
+==3644404== 6 bytes in 1 blocks are definitely lost in loss record 1 of 6
+==3644404==    at 0x48484F4: malloc (m_replacemalloc/vg_replace_malloc.c:446)
+==3644404==    by 0x1093D6: main (in /home/phonekha/c/C07/ex03/a.out)
+==3644404== 
+==3644404== 6 bytes in 1 blocks are definitely lost in loss record 2 of 6
+==3644404==    at 0x48484F4: malloc (m_replacemalloc/vg_replace_malloc.c:446)
+==3644404==    by 0x1093F8: main (in /home/phonekha/c/C07/ex03/a.out)
+==3644404== 
+==3644404== 6 bytes in 1 blocks are definitely lost in loss record 3 of 6
+==3644404==    at 0x48484F4: malloc (m_replacemalloc/vg_replace_malloc.c:446)
+==3644404==    by 0x10941C: main (in /home/phonekha/c/C07/ex03/a.out)
+==3644404== 
+==3644404== LEAK SUMMARY:
+==3644404==    definitely lost: 18 bytes in 3 blocks
+==3644404==    indirectly lost: 0 bytes in 0 blocks
+==3644404==      possibly lost: 0 bytes in 0 blocks
+==3644404==    still reachable: 1,067 bytes in 3 blocks
+==3644404==         suppressed: 0 bytes in 0 blocks
+==3644404== Reachable blocks (those to which a pointer was found) are not shown.
+==3644404== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==3644404== 
+==3644404== For lists of detected and suppressed errors, rerun with: -s
+==3644404== ERROR SUMMARY: 21 errors from 5 contexts (suppressed: 0 from 0)
+zsh: segmentation fault (core dumped)  valgrind --leak-check=full --track-origins=yes ./a.out
