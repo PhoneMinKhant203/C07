@@ -10,74 +10,69 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
-int	ft_strlen(char *str)
+int ft_strlen(char *str)
 {
-	int	count;
-
-	count = 0;
-	while (str[count])
-		count++;
-	return (count);
+    int count = 0;
+    while (str[count])
+        count++;
+    return count;
 }
 
-void	ft_find_len(int *size, char **strs, int len)
+void ft_write_data_no_malloc(int size, char *result, char **strs, char *sep, int buffer_size)
 {
-	int	index;
+    int index = 0;
+    int str_index;
+    int sep_index;
+    int total = 0;
 
-	index = 0;
-	while (index < len)
-	{
-		*size += ft_strlen(strs[index]);
-		index++;
-	}
+    while (index < size)
+    {
+        str_index = 0;
+        while (strs[index][str_index])
+        {
+            if (total >= buffer_size - 1) // Leave space for null terminator
+                return;
+            result[total++] = strs[index][str_index++];
+        }
+        sep_index = 0;
+        while (index < (size - 1) && sep[sep_index])
+        {
+            if (total >= buffer_size - 1)
+                return;
+            result[total++] = sep[sep_index++];
+        }
+        index++;
+    }
+    if (total < buffer_size)
+        result[total] = '\0';
 }
 
-void	ft_write_data(int size, char **result, char **strs, char *sep)
+int ft_strjoin_no_malloc(int size, char **strs, char *sep, char *buffer, int buffer_size)
 {
-	int	index;
-	int	str_index;
-	int	sep_index;
-	int	total;
+    int total_size = 0;
+    int i;
 
-	total = 0;
-	index = 0;
-	while (index < size)
-	{
-		str_index = 0;
-		while (strs[index][str_index])
-			(*result)[total++] = strs[index][str_index++];
-		sep_index = 0;
-		while (index < (size -1) && sep[sep_index])
-			(*result)[total++] = sep[sep_index++];
-		index++;
-	}
-	(*result)[total] = '\0';
+    if (size == 0)
+    {
+        if (buffer_size < 1)
+            return 0; // failure: not enough space for '\0'
+        buffer[0] = '\0';
+        return 1; // success
+    }
+
+    // Calculate total length needed
+    for (i = 0; i < size; i++)
+        total_size += ft_strlen(strs[i]);
+    total_size += ft_strlen(sep) * (size - 1);
+
+    if (total_size + 1 > buffer_size)
+        return 0; // failure: buffer too small
+
+    ft_write_data_no_malloc(size, buffer, strs, sep, buffer_size);
+
+    return 1; // success
 }
 
-char	*ft_strjoin(int size, char **strs, char *sep)
-{
-	int		total_size;
-	char	*result;
-
-	if (size == 0)
-	{
-		result = malloc(sizeof(char) * 1);
-		result[0] = '\0';
-		return (result);
-	}
-	ft_find_len(&total_size, strs, size);
-	total_size += ft_strlen(sep) * (size - 1);
-	result = (char *)malloc(sizeof(char) * (total_size + 1));
-	if (result == NULL)
-	{
-		result = NULL;
-		return (result);
-	}
-	ft_write_data(size, &result, strs, sep);
-	return (result);
-}
 
 // #include <stdio.h>
 // int main(void)

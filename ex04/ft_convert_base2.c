@@ -10,44 +10,40 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(char *str)
+int ft_strlen(char *str)
 {
-	int	cur;
-
-	cur = 0;
-	while (str[cur] != 0)
-		cur++;
-	return (cur);
+    int cur = 0;
+    while (str[cur] != '\0')
+        cur++;
+    return (cur);
 }
 
-char	*rev_str(char *str)
+char *rev_str(char *str)
 {
-	int		size;
-	int		cur;
-	char	tmp;
+    int start = 0;
+    int end = ft_strlen(str) - 1;
+    char tmp;
 
-	size = ft_strlen(str) - 1;
-	cur = 0;
-	while (cur < size - cur)
-	{
-		tmp = str[cur];
-		str[cur] = str[size - cur];
-		str[size - cur] = tmp;
-		cur++;
-	}
-	return (str);
+    while (start < end)
+    {
+        tmp = str[start];
+        str[start] = str[end];
+        str[end] = tmp;
+        start++;
+        end--;
+    }
+    return (str);
 }
 
-int	pos_in_str(char *str, char c)
+int pos_in_str(char *str, char c)
 {
-	int	cur;
-
-	cur = 0;
-	while (str[cur] != 0)
-	{
-		if (str[cur] == c)
-			return (cur);
-		cur++;
-	}
-	return (-1);
+    int cur = 0;
+    while (str[cur] != '\0')
+    {
+        if (str[cur] == c)
+            return (cur);
+        cur++;
+    }
+    return (-1);
 }
+

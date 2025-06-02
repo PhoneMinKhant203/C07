@@ -10,121 +10,152 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <stdio.h>
 
-int		ft_strlen(char *str);
-char	*rev_str(char *str);
-int		pos_in_str(char *str, char c);
-
-int	ft_check_base(char *base)
+int ft_strlen(char *str)
 {
-	int	cur;
-	int	cur2;
-
-	cur = 0;
-	if (ft_strlen(base) < 2)
-		return (0);
-	cur = 0;
-	while (base[cur])
-	{
-		if (base[cur] == '+' || base[cur] == '-')
-			return (0);
-		if ((base[cur] >= 9 && base[cur] <= 13) || base[cur] == ' ')
-			return (0);
-		if (base[cur] < 32 || base[cur] > 126)
-			return (0);
-		cur2 = cur + 1;
-		while (base[cur2])
-		{
-			if (base[cur] == base[cur2])
-				return (0);
-			cur2++;
-		}
-		cur++;
-	}
-	return (1);
+    int i = 0;
+    while (str[i])
+        i++;
+    return i;
 }
 
-int	ft_malloc(char **nbr_str, int *is_neg, long *nbrl)
+char *rev_str(char *str)
 {
-	*nbr_str = malloc(sizeof(char) * 33);
-	if (*nbr_str == NULL)
-		return (0);
-	*is_neg = 1;
-	if (*nbrl < 0)
-	{
-		*nbrl *= -1;
-		*is_neg = -1;
-	}
-	return (1);
+    int i = 0;
+    int j = ft_strlen(str) - 1;
+    char tmp;
+    while (i < j)
+    {
+        tmp = str[i];
+        str[i] = str[j];
+        str[j] = tmp;
+        i++;
+        j--;
+    }
+    return str;
 }
 
-char	*ft_getnbr_base(int nbr, char *base)
+int pos_in_str(char *str, char c)
 {
-	long	nbrl;
-	char	*nbr_str;
-	int		base_len;
-	int		cur;
-	int		is_neg;
-
-	nbrl = nbr;
-	if (ft_malloc(&nbr_str, &is_neg, &nbrl) == 0)
-		return (0);
-	base_len = ft_strlen(base);
-	cur = 0;
-	while (nbrl > 0)
-	{
-		nbr_str[cur++] = base[nbrl % base_len];
-		nbrl /= base_len;
-	}
-	if (nbr == 0)
-		nbr_str[cur++] = '0';
-	if (is_neg == -1)
-		nbr_str[cur++] = '-';
-	nbr_str[cur] = '\0';
-	return (rev_str(nbr_str));
+    int i = 0;
+    while (str[i])
+    {
+        if (str[i] == c)
+            return i;
+        i++;
+    }
+    return -1;
 }
 
-int	ft_atoi_base(char *str, char *base)
+int ft_check_base(char *base)
 {
-	int	cur;
-	int	is_neg;
-	int	result;
-	int	base_len;
-
-	base_len = ft_strlen(base);
-	result = 0;
-	is_neg = 1;
-	cur = 0;
-	while ((str[cur] >= 9 && str[cur] <= 13) || str[cur] == ' ')
-		cur++;
-	while (str[cur] && (str[cur] == '+' || str[cur] == '-'))
-	{
-		if (str[cur] == '-')
-			is_neg *= -1;
-		cur++;
-	}
-	while (str[cur] && pos_in_str(base, str[cur]) != -1)
-	{
-		result = result * base_len + pos_in_str(base, str[cur]);
-		cur++;
-	}
-	return (result * is_neg);
+    int i, j;
+    if (ft_strlen(base) < 2)
+        return 0;
+    for (i = 0; base[i]; i++)
+    {
+        if (base[i] == '+' || base[i] == '-')
+            return 0;
+        if ((base[i] >= 9 && base[i] <= 13) || base[i] == ' ')
+            return 0;
+        if (base[i] < 32 || base[i] > 126)
+            return 0;
+        for (j = i + 1; base[j]; j++)
+        {
+            if (base[i] == base[j])
+                return 0;
+        }
+    }
+    return 1;
 }
 
-char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
+// Converts integer to string in given base (without malloc)
+// Caller must provide a buffer large enough (e.g., 33 chars)
+// Returns pointer to buffer with null-terminated string result
+char *ft_getnbr_base_no_malloc(int nbr, char *base, char *buffer, int buffer_size)
 {
-	int		str_to_int;
-	char	*int_to_str;
+    long nbrl = nbr;
+    int base_len = ft_strlen(base);
+    int cur = 0;
+    int is_neg = 1;
 
-	if (ft_check_base(base_from) == 0)
-		return (0);
-	if (ft_check_base(base_to) == 0)
-		return (0);
-	str_to_int = ft_atoi_base(nbr, base_from);
-	int_to_str = ft_getnbr_base(str_to_int, base_to);
-	return (int_to_str);
+    if (buffer_size < 2) // at least room for '0' and '\0'
+        return NULL;
+
+    if (nbrl < 0)
+    {
+        nbrl = -nbrl;
+        is_neg = -1;
+    }
+
+    if (nbrl == 0)
+        buffer[cur++] = base[0];
+
+    while (nbrl > 0 && cur < buffer_size - 1)
+    {
+        buffer[cur++] = base[nbrl % base_len];
+        nbrl /= base_len;
+    }
+
+    if (is_neg == -1)
+    {
+        if (cur >= buffer_size - 1) // not enough space for '-'
+            return NULL;
+        buffer[cur++] = '-';
+    }
+    buffer[cur] = '\0';
+
+    return rev_str(buffer);
 }
+
+int ft_atoi_base(char *str, char *base)
+{
+    int cur = 0;
+    int is_neg = 1;
+    int result = 0;
+    int base_len = ft_strlen(base);
+    int pos;
+
+    while ((str[cur] >= 9 && str[cur] <= 13) || str[cur] == ' ')
+        cur++;
+    while (str[cur] == '+' || str[cur] == '-')
+    {
+        if (str[cur] == '-')
+            is_neg *= -1;
+        cur++;
+    }
+    while (str[cur] && (pos = pos_in_str(base, str[cur])) != -1)
+    {
+        result = result * base_len + pos;
+        cur++;
+    }
+    return (result * is_neg);
+}
+
+// Converts nbr string from base_from to base_to, writing result to buffer
+// Returns pointer to buffer or NULL on error
+char *ft_convert_base_no_malloc(char *nbr, char *base_from, char *base_to, char *buffer, int buffer_size)
+{
+    int num;
+    if (!ft_check_base(base_from) || !ft_check_base(base_to))
+        return NULL;
+    num = ft_atoi_base(nbr, base_from);
+    return ft_getnbr_base_no_malloc(num, base_to, buffer, buffer_size);
+}
+
+// int main(void)
+// {
+//     char result[33];
+
+//     char *converted = ft_convert_base_no_malloc("42", "0123456789", "0123456789ABCDEF", result, sizeof(result));
+//     if (converted)
+//         printf("Converted: %s\n", converted);
+//     else
+//         printf("Conversion error\n");
+
+//     return 0;
+// }
 
 // int main(void)
 // {
