@@ -12,42 +12,39 @@
 
 int	ft_strlen(char *str)
 {
-	int	cur;
+	int	len = 0;
 
-	cur = 0;
-	while (str[cur] != 0)
-		cur++;
-	return (cur);
+	while (str[len])
+		len++;
+	return (len);
 }
 
 char	*rev_str(char *str)
 {
-	int		size;
-	int		cur;
+	int	start = 0;
+	int	end = ft_strlen(str) - 1;
 	char	tmp;
 
-	size = ft_strlen(str) - 1;
-	cur = 0;
-	while (cur < size - cur)
+	while (start < end)
 	{
-		tmp = str[cur];
-		str[cur] = str[size - cur];
-		str[size - cur] = tmp;
-		cur++;
+		tmp = str[start];
+		str[start] = str[end];
+		str[end] = tmp;
+		start++;
+		end--;
 	}
 	return (str);
 }
 
 int	pos_in_str(char *str, char c)
 {
-	int	cur;
+	int	i = 0;
 
-	cur = 0;
-	while (str[cur] != 0)
+	while (str[i])
 	{
-		if (str[cur] == c)
-			return (cur);
-		cur++;
+		if (str[i] == c)
+			return (i);
+		i++;
 	}
 	return (-1);
 }
